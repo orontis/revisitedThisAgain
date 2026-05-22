@@ -1,0 +1,6 @@
+private int startsize;
+private ArrayList<Card> cards;
+Deck(int start) {
+  startsize = start;
+  
+}
