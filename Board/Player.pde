@@ -36,7 +36,7 @@ class Player {
     money += amount;
   }
   
-  void rollMove() { // UNFINISHED
+  void rollMove(Space[] board) { // UNFINISHED
     if (jailTime > 0) {
       jailTime--;
       println("Still in jail; " + jailTime + " rounds till freedom");
@@ -47,7 +47,19 @@ class Player {
     int move = die1 + die2;
     int oldpos = spaceIndex;
     spaceIndex = (spaceIndex + move) % 40;
+    if (spaceIndex < oldpos) {
+      money += 200;
+      println("Passed GO (+$200)");
+    }
     println("Rolled " + die1 + " and " + die2);
+    println("Moved to space " + spaceIndex);
+    Space landed = board[spaceIndex];
+    println("Landed on " + landed.getName());
+  }
+  
+  void goToJail() {
+    spaceIndex = 10; // jailspace
+    jailTime = 3;
   }
   
   int getMoney() {

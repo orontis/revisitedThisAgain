@@ -7,4 +7,8 @@ class Space {
     name = n;
   }
   
+  String getName() {
+    return name;
+  }
+  
 }
