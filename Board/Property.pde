@@ -27,5 +27,9 @@ class Property extends Space {
   int getCost() {
     return cost;
   }
+  
+  int getRent() {
+    return (cost / 5);
+  }
 
 }

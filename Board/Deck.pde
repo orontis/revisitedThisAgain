@@ -23,7 +23,7 @@ class Deck {
   
   void shuffle() {
     for (int i = 0; i < cards.size(); i++) {
-      int rand = int(random(cards.size());
+      int rand = int(random(cards.size()));
       Card temp = cards.get(i);
       cards.set(i, cards.get(rand));
       cards.set(rand, temp);

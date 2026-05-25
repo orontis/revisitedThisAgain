@@ -21,6 +21,10 @@ class Player {
     if (p == null) {
       return;
     }
+    if (p.getOwner() != null) {
+      println("Property already owned");
+      return;
+    }
     if (money >= p.getCost()) {
       money -= p.getCost();
       ownedProperties.add(p);
@@ -39,8 +43,14 @@ class Player {
   void rollMove(Space[] board) { // UNFINISHED
     if (jailTime > 0) {
       jailTime--;
-      println("Still in jail; " + jailTime + " rounds till freedom");
-      return;
+      if (jailTime == 0) {
+        money -= 50;
+        println("Paid $50 to leave jail");
+      }
+      else {
+        println("Still in jail; " + jailTime + " rounds till freedom");
+        return;
+      }
     }
     int die1 = int(random(1,7));
     int die2 = int(random(1,7));
@@ -55,11 +65,32 @@ class Player {
     println("Moved to space " + spaceIndex);
     Space landed = board[spaceIndex];
     println("Landed on " + landed.getName());
+    if (landed instanceof Property) {
+      Property p = (Property) landed;
+      if (p.getOwner() != null && p.getOwner() != this) {
+        int rent = p.getRent();
+        money -= rent;
+        p.getOwner().earnMoney(rent);
+        println("Paid $" + rent + " rent");
+      }
+    }
+  }
+  
+  void drawCard(Deck d) {
+    Card drawn = d.removeCard();
+    if (drawn == null) return;
+    println("Player " + playerID + " drew card " + drawn.getCardNum());
+    if (drawn.getCardNum() == 0) {
+      earnMoney(200);
+      println("Earned $200");
+    }
+    if (drawn.getCardNum() == 1) goToJail();
   }
   
   void goToJail() {
     spaceIndex = 10; // jailspace
     jailTime = 3;
+    println("Sent to jail");
   }
   
   int getMoney() {
