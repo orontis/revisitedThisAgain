@@ -1,9 +1,23 @@
 class Property extends Space {
   
   private Player owner;
+  private int cost;
   
-  Property(String n) {
+  Property(String n, int c) {
     super(n);
+    cost = c;
+  }
+  
+  Player getOwner() {
+    return owner;
+  }
+  
+  void setOwner(Player p) {
+    owner = p; 
+  }
+  
+  boolean isOwned() {
+    return (owner != null);
   }
   
   String getName() { // UNFINISHED
@@ -11,12 +25,7 @@ class Property extends Space {
   }
   
   int getCost() {
-    return 0; // UNFINISHED
+    return cost;
   }
-  
-  void setOwner(Player p) {
-    owner = p;
-  }
-  
 
 }
