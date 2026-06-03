@@ -20,9 +20,7 @@ class Property extends Space {
     return (owner != null);
   }
   
-  String getName() { // UNFINISHED
-    return "fjjfejwfweiowegawhpogpowigpohwgphoawgop PLACEHOLDER";
-  }
+  
   
   int getCost() {
     return cost;

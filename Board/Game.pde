@@ -1,13 +1,13 @@
 BoardObj board;
 
 void setup() {
-  size(800, 800);
+  size(650, 850);
   board = new BoardObj();
 }
 
 
 void draw() {
-  
+  board.draw();
 }
 
 void keyPressed() {
