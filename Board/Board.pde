@@ -4,8 +4,14 @@ Deck communityChest;
 Player[] players;
 int turnIndex;
 Space[] gameBoard;
-final int[] X = {0, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550};
-final int[] Y = {0, 0,    0,    0,  0,   0,   0,   0,   0,   0,   0};
+final int[] X = {0,   100, 150, 200, 250, 300, 350, 400, 450, 500, 
+                 550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 
+                 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 
+                 0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
+final int[] Y = { 0,  0,   0,    0,  0,   0,   0,   0,   0,   0, 
+                  0,  100, 150, 200, 250, 300, 350, 400, 450, 500,
+                 550, 550, 550, 550, 550, 550, 550, 550, 550, 550,
+                 550, 500, 450, 400, 350, 300, 250, 200, 150, 100,};
 
 BoardObj() {
   turnIndex = 0;
@@ -21,12 +27,47 @@ BoardObj() {
 void createBoard() {
   
   gameBoard[0] = new BlankSpace("GO");
-  gameBoard[1] = new ColorGroupProperty(60, "Purple", "Mediterranean Avenue");
-  //gameBoard[2] = new CardSpace("Community Chest", 1);
-  //gameBoard[3] = new ColorGroupProperty(60, "Purple", "Baltic Avenue");
-  //gameBoard[4] = new TaxSpace("Income Tax", 200);
-  //gameBoard[5] = new Railroad("Reading Railroad", 200);
-  // WILL FINISH THE REST LATER
+  gameBoard[1] = new ColorGroupProperty(60, "Brown", "Med. \nAvenue");
+  gameBoard[2] = new CardSpace("Community \nChest", 1);
+  gameBoard[3] = new ColorGroupProperty(60, "Brown", "Baltic \nAvenue");
+  gameBoard[4] = new TaxSpace("Income Tax", 200);
+  gameBoard[5] = new Railroad("Reading RR", 200);
+  gameBoard[6] = new ColorGroupProperty(100, "Light Blue", "Oriental \nAvenue");
+  gameBoard[7] = new CardSpace("Chance", 2);
+  gameBoard[8] = new ColorGroupProperty(100, "Light Blue", "Vermont \nAvenue");
+  gameBoard[9] = new ColorGroupProperty(120, "Light Blue", "Con. \nAvenue");
+  gameBoard[10] = new BlankSpace("Just \nvisiting");
+  gameBoard[11] = new ColorGroupProperty(140, "Pink", "St. Charles \nPlace");
+  gameBoard[12] = new UtilitySpace(150,  "Electric \nCompany");
+  gameBoard[13] = new ColorGroupProperty(140, "Pink", "States \nAvenue");
+  gameBoard[14] = new ColorGroupProperty(160, "Pink", "Virginia \nAvenue");
+  gameBoard[15] = new Railroad("Penn. RR", 200);
+  gameBoard[16] = new ColorGroupProperty(180, "Orange", "St.James \nPlace");
+  gameBoard[17] = new CardSpace("Community \nChest", 1);
+  gameBoard[18] = new ColorGroupProperty(180, "Orange", "Tennessee \nAvenue");
+  gameBoard[19] = new ColorGroupProperty(200, "Orange", "New York \nAvenue");
+  gameBoard[20] = new BlankSpace("Free \nParking");
+  gameBoard[21] = new ColorGroupProperty(220, "Red", "Kentucky \nAvenue");
+  gameBoard[22] = new CardSpace("Chance", 2);
+  gameBoard[23] = new ColorGroupProperty(220, "Red", "Indiana \nAvenue");
+  gameBoard[24] = new ColorGroupProperty(240, "Red", "Illinois \nAvenue"); 
+  gameBoard[25] = new Railroad("B&O RR", 200);
+  gameBoard[26] = new ColorGroupProperty(260, "Yellow", "Atlantic \nAvenue");
+  gameBoard[27] = new ColorGroupProperty(260, "Yellow", "Ventnor \nAvenue");
+  gameBoard[28] = new UtilitySpace(150, "Water \nWorks");
+  gameBoard[29] = new ColorGroupProperty(280, "Yellow", "Marvin \nGardens");
+  gameBoard[30] = new BlankSpace("Go to \njail");
+  gameBoard[31] = new ColorGroupProperty(300, "Green", "Pacific \nAvenue");
+  gameBoard[32] = new ColorGroupProperty(300, "Green", "N.C. \nAvenue");
+  gameBoard[33] = new CardSpace("Community \nChest", 1);
+  gameBoard[34] = new ColorGroupProperty(300, "Green", "Penn. \nAvenue");
+  gameBoard[35] = new Railroad("Short Line RR", 200);
+  gameBoard[36] = new CardSpace("Chance", 2);
+  gameBoard[37] = new ColorGroupProperty(350, "Blue", "Park \nPlace");
+  gameBoard[38] = new TaxSpace("Luxury Tax", 100);
+  gameBoard[39] = new ColorGroupProperty(400, "Blue", "Boardwalk");
+
+
 }
 
 void playerTurn() {
@@ -39,14 +80,13 @@ void playerTurn() {
 void draw() {
   fill (255, 255, 255);
   rect(0, 0, 650, 650);
-  
+
   
  
   for (int i = 0; i < gameBoard.length; i++){
     if (gameBoard[i] != null) {
     //top left corner, z is orientation
- 
-  int z = 1;
+    int z = i/10 + 1;
     gameBoard[i].draw(X[i], Y[i], z); 
   }
   }
