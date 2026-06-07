@@ -1,12 +1,17 @@
 class Player {
   
   private int money;   
-  private ArrayList<Property> ownedProperties;
+  public ArrayList<Property> ownedProperties;
   private int spaceIndex;
   private int playerID;
   private int jailCards;
   private int jailTime;
   private boolean monopoly;
+  
+  public int getJailCards() {
+    return jailCards;
+  }
+  
   
   public boolean getMon() {
     return monopoly;
@@ -41,6 +46,8 @@ class Player {
       ownedProperties.add(p);
       p.setOwner(this);
       println("Player " + playerID + " bought " + p.getName());
+      boolean hasMonopoly = true;
+      
     }
     else {
       return false;

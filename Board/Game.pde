@@ -36,20 +36,25 @@ void draw() {
   fill(0, 0, 0);
   text(textToDisplay, 120, 140);
   
-  
+ 
 //PLAYER STATS  
-  fill(255, 255, 255);
-  textSize(30);
-  text("Player1", 3, 680);
-  text("Player2", 328, 680);
+  
+  displayInfo();
+  
+//Whose turn is it
+
+if (playerState == PlayerState.END_OF_TURN) {
+   endTurn();
+}
   
 // SET UP THE BUTTONS
   textSize(20);
   fill(0, 0, 0);
-  text("Buy houses", 110, 300);
-  text("Spend Jail Card", 110, 375);
-  text("Buy property", 110, 450);
-  text("Don't buy property", 110, 525);
+  text("Buy houses", 110, 298);
+  text("Spend Jail Card", 110, 328);
+  text("Buy property", 110, 358);
+  text("Don't buy property", 110, 388);
+  text("End turn", 110, 418);
   
    if(playerState == PlayerState.BEGINNING_OF_TURN) {
       rollOn();
@@ -69,6 +74,12 @@ void draw() {
       rollOff();
     }
     
+    if(playerState == PlayerState.JAIL_TIME && players[turnIndex].getJailCards() >= 1) {
+      jailCardOn();
+    } else {
+      jailCardOff();
+    }
+    
      if(playerState == PlayerState.BUYING) {
       buyPropOn();
       dontBuyPropOn();
@@ -82,6 +93,12 @@ void draw() {
     } else {
       rollOff();
     }
+    
+    if(playerState == PlayerState.END_OF_TURN) {
+      endTurnOn();
+    } else {
+      endTurnOff();
+    }
   
 // SET PLAYER LOCATIONS  
   fill(255, 0, 0);
@@ -90,17 +107,39 @@ void draw() {
   circle(board.X[players[1].getSpace()] + 10, board.Y[players[1].getSpace()]+ 10, 10 );
 
 // RUN THE NEXT TURN
-  playerTurn(); 
+
 }
 
-void playerTurn() {
-  Player current = players[turnIndex];
+
+
+void displayInfo() {
+  fill(0, 0, 0);
+  rect(0, 650, 650, 200);
+  fill(255, 255, 255);
+  textSize(30);
+  text("Player1", 3, 680);
+  text("Player2", 328, 680);
+  String p1 = "";
+  String p2 = "";
+  for(Property x: players[0].ownedProperties ) {
+    p1 += "\n" + x.getName();
+  }
+  for(Property x: players[1].ownedProperties ) {
+    p2 += "\n" + x.getName();
+  }
+  textSize(15);
+  text(p1, 170, 670);
+  text(p2, 475, 670);
   
-  turnIndex++;
-  turnIndex %= players.length; // wraps turn around (prevents it from going over 1)
+  textSize(20);
+  text("$" + players[0].getMoney(), 3, 710);
+  text("$" + players[1].getMoney(), 328, 710);
 }
 
-
+void endTurn() { 
+  playerState = PlayerState.BEGINNING_OF_TURN;
+  turnIndex = abs(turnIndex - 1);
+}
 
 
 void mousePressed() {
@@ -115,6 +154,7 @@ void mousePressed() {
       Card card = cardSpace.getDeck().drawCard();
       textToDisplay += "\nyou drew a card!";
       card.doThing();
+      playerState = PlayerState.END_OF_TURN;
     }
 //IF OWNED PROPERTY
     if (landedOn instanceof Property) {
@@ -126,6 +166,7 @@ void mousePressed() {
           textToDisplay += "you pay" + prop.getRent();
           players[turnIndex].loseMoney(prop.getRent());
           players[abs(turnIndex - 1)].earnMoney(prop.getRent());
+          playerState = PlayerState.END_OF_TURN;
         }
       } else {
         textToDisplay += "\nWould you like to buy it?";
@@ -136,31 +177,36 @@ void mousePressed() {
 //IF TAX SPACE
   if (landedOn instanceof TaxSpace) {
     TaxSpace tax = (TaxSpace)landedOn;
-    textToDisplay += "Paying " + tax.getTax();
+    textToDisplay += "\nPaying " + tax.getTax();
     players[turnIndex].loseMoney(tax.getTax());
+    displayInfo();
+    playerState = PlayerState.END_OF_TURN;
   } 
  
 //IF BLANK SPACE
+  if(landedOn instanceof BlankSpace) {
+    playerState = PlayerState.END_OF_TURN;
+  }
 
 
     
     
     }
  
- if (mouseX >= 330 && mouseX <= 355 && mouseY >= 435 && mouseY <= 460 && playerState == PlayerState.BUYING) {
-   if(players[turnIndex].buyProperty((Property)board.gameBoard[players[turnIndex].getSpace()])) {
-     println("bought");
+ if (mouseX >= 330 && mouseX <= 355 && mouseY >= 340 && mouseY <= 365 && playerState == PlayerState.BUYING) {
+   if(players[turnIndex].buyProperty((Property)board.gameBoard[players[turnIndex].getSpace()])) {  
    }
+   playerState = PlayerState.END_OF_TURN;
    //end turn
  }
- if (mouseX >= 330 && mouseX <= 355 && mouseY >= 505 && mouseY <= 530 && playerState == PlayerState.BUYING) {
-   //end turn
+ if (mouseX >= 330 && mouseX <= 355 && mouseY >= 370 && mouseY <= 395 && playerState == PlayerState.BUYING) {
+     playerState = PlayerState.END_OF_TURN;
    }
  }
  
  
  
-}
+
 
 void rollOn() {
   fill(20, 200, 20);
@@ -186,31 +232,40 @@ void buyHousesOff() {
 
 void jailCardOn() {
   fill(20, 200, 20);
-  rect(330, 355, 25, 25);  
+  rect(330, 310, 25, 25);  
 }
 
 void jailCardOff() {
   fill(200, 20, 20);
-  rect(330, 355, 25, 25);
+  rect(330, 310, 25, 25);
 }
 
 void buyPropOn() {
   fill(20, 200, 20);
-  rect(330, 435, 25, 25);   
+  rect(330, 340, 25, 25);   
 }
 
 void buyPropOff() {
   fill(200, 20, 20);
-  rect(330, 435, 25, 25); 
+  rect(330, 340, 25, 25); 
 }
 
 void dontBuyPropOn() {
   fill(20, 200, 20);
-  rect(330, 505, 25, 25);  
+  rect(330, 370, 25, 25);  
 }
 
 void dontBuyPropOff() {
   fill(200, 20, 20);
-  rect(330, 505, 25, 25);
+  rect(330, 370, 25, 25);
 }
  
+void endTurnOn() {
+  fill(20, 200, 20);
+  rect(330, 400, 25, 25);  
+}
+
+void endTurnOff() {
+  fill(200, 20, 20);
+  rect(330, 400, 25, 25);
+}
