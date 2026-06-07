@@ -5,7 +5,7 @@ class BlankSpace extends Space {
     }
     
    void draw(int x, int y, int z) {  
-     fill(255, 255, 255);
+     fill(210, 229, 210);
      rect(x, y, 100, 100);
      
     if (z == 1) {

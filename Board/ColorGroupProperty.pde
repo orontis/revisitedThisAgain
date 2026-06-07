@@ -64,7 +64,7 @@ class ColorGroupProperty extends Property {
       w = 100;
       h = 50;
     }
-     fill(255, 255, 255);
+    fill(210, 229, 210);
      rect(x, y, w, h);
      colorChange();
      if (z == 1) {

@@ -20,7 +20,7 @@ class Railroad extends Property{
       w = 100;
       h = 50;
     }
-     fill(255, 255, 255);
+     fill(210, 229, 210);
      rect(x, y, w, h);
      if (z == 1) {
      fill(0, 0, 0);

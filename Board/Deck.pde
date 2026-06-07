@@ -12,7 +12,7 @@ class Deck {
    shuffle();
   }
   
-  Card removeCard() {
+  Card drawCard() {
     if (cards.size() == 0) {
       println("Deck empty");
       return null;

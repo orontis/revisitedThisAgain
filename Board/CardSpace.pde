@@ -1,11 +1,16 @@
 class CardSpace extends Space {
   
-    private int CardID;
+    private Deck deck;
     
-    CardSpace(String n, int ID) {
+    CardSpace(String n, Deck ID) {
       super(n);
-      CardID = ID;
+      deck = ID;
     }
+    
+    public Deck getDeck() {
+      return deck;
+    }
+    
     void draw(int x, int y, int z) {
       textSize(10);
      int h = 0; 
@@ -18,7 +23,7 @@ class CardSpace extends Space {
       w = 100;
       h = 50;
     }
-     fill(255, 255, 255);
+     fill(210, 229, 210);
      rect(x, y, w, h);
      if (z == 1) {
      fill(0, 0, 0);
