@@ -6,6 +6,11 @@ class Player {
   private int playerID;
   private int jailCards;
   private int jailTime;
+  private boolean monopoly;
+  
+  public boolean getMon() {
+    return monopoly;
+  }
   
   
  public int getSpace() {
@@ -18,16 +23,18 @@ class Player {
     ownedProperties = new ArrayList<Property>();
     spaceIndex = 0;
     jailCards = 0;
-    jailTime = 0;   
+    jailTime = 0;
+    monopoly = false;
   }
   
-  void buyProperty(Property p) {
+  
+  boolean buyProperty(Property p) {
     if (p == null) {
-      return;
+      return true;
     }
     if (p.getOwner() != null) {
       println("Property already owned");
-      return;
+      return true;
     }
     if (money >= p.getCost()) {
       money -= p.getCost();
@@ -36,12 +43,17 @@ class Player {
       println("Player " + playerID + " bought " + p.getName());
     }
     else {
-      println("Not enough money");
+      return false;
     }
+    return false;
   }
   
   void earnMoney(int amount) {
     money += amount;
+  }
+  
+  void loseMoney(int amount) {
+    money -= amount;
   }
   
   String rollMove(BoardObj board) { // UNFINISHED

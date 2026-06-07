@@ -9,5 +9,9 @@ Card(int num) {
 int getCardNum() {
   return cardNumber;
 }
+
+void doThing() {
+  println("card does a thing");
+}
   
 }

@@ -16,7 +16,7 @@ class Property extends Space {
     owner = p; 
   }
   
-  boolean isOwned() {
+  public boolean isOwned() {
     return (owner != null);
   }
   
