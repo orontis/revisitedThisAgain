@@ -126,6 +126,21 @@ class Player {
   //  }
   //}
   
+  String drawCard(Deck deck) { // Does the thing on the card
+  Card card = deck.drawCard();
+  if (card == null) {
+    return "No cards left";
+  }
+  money += card.getMoneyChange();
+  if (card.getDestination() != -1) {
+    spaceIndex = card.getDestination();
+  }
+  if (card.goesToJail()) {
+    goToJail();
+  }
+  return card.getDescription();
+}
+  
   
   
   

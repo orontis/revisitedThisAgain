@@ -14,8 +14,8 @@ void setup() {
   playerState = PlayerState.BEGINNING_OF_TURN;
   size(650, 850); 
   turnIndex = 0;
-  chance = new Deck(16);
-  communityChest = new Deck(16);
+  chance = new Deck();
+  communityChest = new Deck();
   board = new BoardObj(chance, communityChest);
   players = new Player[2];
   players[0] = new Player(1500, 0);
@@ -213,12 +213,11 @@ void mousePressed() {
     
 //IF CARD SPACE
     if (landedOn instanceof CardSpace) {
-      textToDisplay += "\nyou drew a card!";
-      int i = (int)(random(0, 100));
-      textToDisplay += "\nYou won $" + i;
-      players[turnIndex].earnMoney(i);
+      CardSpace cs =(CardSpace) landedOn;
+      String cardText = players[turnIndex].drawCard(cs.getDeck());
+      textToDisplay += "\nCard Drawn:\n" + cardText;
       playerState = PlayerState.END_OF_TURN;
-    }
+}
 //IF OWNED PROPERTY
     if (landedOn instanceof Property) {
       Property prop = (Property)landedOn;
