@@ -1,3 +1,4 @@
+
 class Card {
   
 private int cardNumber;

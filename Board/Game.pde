@@ -1,10 +1,11 @@
 BoardObj board;
 int turnIndex = 0;
 Player[] players;
-public Deck chance;
-public Deck communityChest;
+Deck chance;
+Deck communityChest;
 PlayerState playerState;
 String textToDisplay = "";
+boolean test = true;
 
 
 
@@ -19,10 +20,29 @@ void setup() {
   players = new Player[2];
   players[0] = new Player(1500, 0);
   players[1] = new Player(1500, 1);
+  if (test) {
+  players[0].buyProperty((Property)board.gameBoard[1]);
+  players[0].buyProperty((Property)board.gameBoard[3]);
+  ((ColorGroupProperty)board.gameBoard[3]).addHouses();
+  }
 }
 
 
 void draw() {
+  //CHECK FOR END
+  if (players[0].getMoney() < 0) {
+    fill(0, 0, 0);
+    textSize(40);
+    text("Player2 wins!", 5, 300);
+    return;
+  }
+  if (players[1].getMoney() < 0) {
+    fill(255, 255, 255);
+    textSize(40);
+    text("Player1 wins!", 5, 300);
+    return;
+  }
+  
   board.draw();
   fill(255, 255, 255);
   rect(375, 300, 150, 150);
@@ -35,6 +55,8 @@ void draw() {
   textSize(30);
   fill(0, 0, 0);
   text(textToDisplay, 120, 140);
+  
+  
   
  
 //PLAYER STATS  
@@ -51,7 +73,7 @@ if (playerState == PlayerState.END_OF_TURN) {
   textSize(20);
   fill(0, 0, 0);
   text("Buy houses", 110, 298);
-  text("Spend Jail Card", 110, 328);
+  text("In jail:", 110, 328);
   text("Buy property", 110, 358);
   text("Don't buy property", 110, 388);
   text("End turn", 110, 418);
@@ -74,11 +96,11 @@ if (playerState == PlayerState.END_OF_TURN) {
       rollOff();
     }
     
-    if(playerState == PlayerState.JAIL_TIME && players[turnIndex].getJailCards() >= 1) {
-      jailCardOn();
+   if(players[turnIndex].jailTime > 0) {
+     jailCardOn();
     } else {
-      jailCardOff();
-    }
+     jailCardOff();
+   }
     
      if(playerState == PlayerState.BUYING) {
       buyPropOn();
@@ -102,10 +124,10 @@ if (playerState == PlayerState.END_OF_TURN) {
   
 // SET PLAYER LOCATIONS  
   fill(255, 0, 0);
-  circle(board.X[players[0].getSpace()], board.Y[players[0].getSpace()], 10);
+  circle(board.X[players[0].getSpace()] + 20, board.Y[players[0].getSpace()] + 10, 10);
   fill(0, 255, 0);
   circle(board.X[players[1].getSpace()] + 10, board.Y[players[1].getSpace()]+ 10, 10 );
-
+  
 // RUN THE NEXT TURN
 
 }
@@ -121,15 +143,26 @@ void displayInfo() {
   text("Player2", 328, 680);
   String p1 = "";
   String p2 = "";
+  char letter = 'a';
   for(Property x: players[0].ownedProperties ) {
-    p1 += "\n" + x.getName();
+    
+    if (playerState == PlayerState.SELECTING_PROPERTY && turnIndex == 0) {
+      p1 += letter + ") ";
+      letter++;
+    }  
+    p1 += x.getName() + "\n";
   }
   for(Property x: players[1].ownedProperties ) {
-    p2 += "\n" + x.getName();
+    
+    if (playerState == PlayerState.SELECTING_PROPERTY && turnIndex == 1) {
+      p2 += letter + ") ";
+      letter++;
+    }
+    p2 += x.getName() + "\n";
   }
-  textSize(15);
-  text(p1, 170, 670);
-  text(p2, 475, 670);
+  textSize(8);
+  text(p1, 170, 655);
+  text(p2, 475, 655);
   
   textSize(20);
   text("$" + players[0].getMoney(), 3, 710);
@@ -141,8 +174,38 @@ void endTurn() {
   turnIndex = abs(turnIndex - 1);
 }
 
+void keyPressed() {
+  if (playerState == PlayerState.SELECTING_PROPERTY) {   
+    int index = key - 'a';
+    if (index < 0 || index >= players[turnIndex].ownedProperties.size()) {
+      return;
+    }
+    Space space = players[turnIndex].ownedProperties.get(index);
+    if(space instanceof ColorGroupProperty) {
+    ((ColorGroupProperty)space).addHouses();
+    players[turnIndex].loseMoney(100);
+    textToDisplay = "House bought.";
+    playerState = PlayerState.BEGINNING_OF_TURN;
+    }
+  }
+  
+}
+
+
+
+
 
 void mousePressed() {
+  if (mouseX >= 330 && mouseX <= 355 && mouseY >= 280 && mouseY <= 305 && players[turnIndex].getMon()) {
+    textToDisplay = ("Buying house. Please\nselect a property.");
+    playerState = PlayerState.SELECTING_PROPERTY;
+  }
+  
+  
+  
+ 
+  
+  
   if (mouseX >= 470 && mouseX <= 495 && mouseY >= 265 && mouseY <= 290 && playerState == PlayerState.BEGINNING_OF_TURN) {
     textToDisplay = players[turnIndex].rollMove(board);
     Space landedOn = board.gameBoard[players[turnIndex].getSpace()];
@@ -150,10 +213,10 @@ void mousePressed() {
     
 //IF CARD SPACE
     if (landedOn instanceof CardSpace) {
-      CardSpace cardSpace = (CardSpace)landedOn;
-      Card card = cardSpace.getDeck().drawCard();
       textToDisplay += "\nyou drew a card!";
-      card.doThing();
+      int i = (int)(random(0, 100));
+      textToDisplay += "\nYou won $" + i;
+      players[turnIndex].earnMoney(i);
       playerState = PlayerState.END_OF_TURN;
     }
 //IF OWNED PROPERTY
@@ -161,9 +224,11 @@ void mousePressed() {
       Property prop = (Property)landedOn;
       if (prop.isOwned()) {    
         if (prop.getOwner() == players[turnIndex])  {
-          textToDisplay += "this is your property"; 
-        } else {
-          textToDisplay += "you pay" + prop.getRent();
+          textToDisplay += "\nThis is your property"; 
+          playerState = PlayerState.END_OF_TURN;
+        } 
+        else {
+          textToDisplay += "\nYou pay $" + prop.getRent();
           players[turnIndex].loseMoney(prop.getRent());
           players[abs(turnIndex - 1)].earnMoney(prop.getRent());
           playerState = PlayerState.END_OF_TURN;
@@ -185,6 +250,10 @@ void mousePressed() {
  
 //IF BLANK SPACE
   if(landedOn instanceof BlankSpace) {
+    if (landedOn.getName().equals("Go to \njail")) {
+      players[turnIndex].jailTime = 3;
+      players[turnIndex].spaceIndex = 10;
+    }
     playerState = PlayerState.END_OF_TURN;
   }
 

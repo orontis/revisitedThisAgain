@@ -4,14 +4,10 @@ class Player {
   public ArrayList<Property> ownedProperties;
   private int spaceIndex;
   private int playerID;
-  private int jailCards;
-  private int jailTime;
+  public int jailTime;
   private boolean monopoly;
   
-  public int getJailCards() {
-    return jailCards;
-  }
-  
+ 
   
   public boolean getMon() {
     return monopoly;
@@ -27,7 +23,7 @@ class Player {
     playerID = ID;
     ownedProperties = new ArrayList<Property>();
     spaceIndex = 0;
-    jailCards = 0;
+  
     jailTime = 0;
     monopoly = false;
   }
@@ -46,7 +42,23 @@ class Player {
       ownedProperties.add(p);
       p.setOwner(this);
       println("Player " + playerID + " bought " + p.getName());
-      boolean hasMonopoly = true;
+      if (p instanceof ColorGroupProperty) {
+       
+        String propColor = ((ColorGroupProperty)p).getColor();
+        int count = 0;
+        for (int i = 0; i < ownedProperties.size(); i++) {
+          if (ownedProperties.get(i) instanceof ColorGroupProperty && 
+          ((ColorGroupProperty)ownedProperties.get(i)).getColor().equals(propColor)) 
+          
+          count++;
+        }
+        if (count == 3) {
+          monopoly = true;
+        }
+        if (count == 2 && (propColor.equals("Blue") || propColor.equals("Brown"))) {
+          monopoly = true;
+        }
+      }
       
     }
     else {
@@ -54,6 +66,8 @@ class Player {
     }
     return false;
   }
+  
+  
   
   void earnMoney(int amount) {
     money += amount;
@@ -65,21 +79,29 @@ class Player {
   
   String rollMove(BoardObj board) { // UNFINISHED
    
-    println("It's your turn! Rolling the die, to move around the board.");
+    println("It's your turn! Rolling the die.");
     int die1 = int(random(1,7));
     int die2 = int(random(1,7));
     int move = die1 + die2;
     String textToDisplay = "you rolled " + die1 + " and " + die2;
     int oldpos = spaceIndex;
+    if (jailTime > 0) { 
+      if (die1 == die2) {
+        textToDisplay += "Rolled doubles!\nOut of jail.";
+        jailTime = 0;
+      } else {
+      textToDisplay += "\nStaying in jail.";
+       jailTime--;
+      }
+    } else {
     spaceIndex = (spaceIndex + move) % 40;
     textToDisplay += "\nlanded on " + board.gameBoard[spaceIndex].getName();
     if (spaceIndex < oldpos) {
       money += 200;
       textToDisplay += ("\nPassed GO (+$200)");   
+      }
     }
-
-      return textToDisplay;
-    
+      return textToDisplay;   
   }
     //Space landed = board[spaceIndex];
     //direction("Landed on " + landed.getName());

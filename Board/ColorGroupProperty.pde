@@ -18,7 +18,7 @@ class ColorGroupProperty extends Property {
   }
   
   void addHouses() {
-    if (numHouses < 5) numHouses++;
+    numHouses++;
   }
   
   int getRent() {
@@ -69,30 +69,50 @@ class ColorGroupProperty extends Property {
      colorChange();
      if (z == 1) {
      rect(x, y + 80, 50, 20); 
+        if (numHouses > 0) {
+           fill(0, 0, 0);
+           textSize(12);
+           text("" + numHouses, x + 40, y + 92);
+     }
      fill(0, 0, 0);
      text(getName(), x + 2, y + 60);
      text( "$" + getCost(), x + 15, y + 15);
      }
      else if (z == 2) {
      rect(x, y, 20, 50);
+     if (numHouses > 0) {
+           fill(0, 0, 0);
+           textSize(12);
+           text("" + numHouses, x + 5, y + 15);
+     }
      fill(0, 0, 0);
      text(getName(), x + 25, y + 20);
      text( "$" + getCost(), x + 72, y + 30);
      }
      else if (z == 3) {
      rect(x, y, 50, 20);
+     if (numHouses > 0) {
+           fill(0, 0, 0);
+           textSize(12);
+           text("" + numHouses, x + 40, y + 10);
+     }
      fill(0, 0, 0);
      text(getName(), x + 8, y + 35);
      text( "$" + getCost(), x + 15, y + 85);
      }
      else {
      rect(x + 80, y, 20, 50);
+     if (numHouses > 0) {
+           fill(0, 0, 0);
+           textSize(12);
+           text("" + numHouses, x + 92, y + 40);
+     }
      fill(0, 0, 0);
      text(getName(), x + 30, y + 25);
      text( "$" + getCost(), x + 2, y + 25);
      }
     
-    
+      
     
    }
   
