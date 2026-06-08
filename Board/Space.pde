@@ -10,4 +10,8 @@ class Space {
     return name;
   }
   
+  void draw(int x, int y, int z) {
+    //top left corner, z is orientation
+  }
+  
 }

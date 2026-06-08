@@ -16,20 +16,18 @@ class Property extends Space {
     owner = p; 
   }
   
-  boolean isOwned() {
+  public boolean isOwned() {
     return (owner != null);
   }
   
-  String getName() { // UNFINISHED
-    return "fjjfejwfweiowegawhpogpowigpohwgphoawgop PLACEHOLDER";
-  }
+  
   
   int getCost() {
     return cost;
   }
   
   int getRent() {
-    return (cost / 5);
+    return (cost / 10);
   }
 
 }

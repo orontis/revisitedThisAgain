@@ -2,17 +2,17 @@ class Deck {
   ArrayList<Card> cards;
   private int startSize;
   
-  Deck(int size) {
+  Deck() {
    cards = new ArrayList<Card>();
-   startSize = size;
-   for (int i = 0; i < size; i++) {
-     Card current = new Card(i);
-     cards.add(current);
-   }
+   cards.add(new Card("Bank error. Collect $200", 200, -1, false));
+   cards.add(new Card("Doctor's fee. Pay $50", -50, -1, false));
+   cards.add(new Card("Advance to GO", 0, 0, false));
+   cards.add(new Card("Go to Jail", 0, -1, true));
+   cards.add(new Card("Collect $100", 100, -1, false));
    shuffle();
   }
   
-  Card removeCard() {
+  Card drawCard() {
     if (cards.size() == 0) {
       println("Deck empty");
       return null;
