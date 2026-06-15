@@ -5,7 +5,7 @@ Deck chance;
 Deck communityChest;
 PlayerState playerState;
 String textToDisplay = "";
-boolean test = true;
+boolean test = false;
 
 
 
